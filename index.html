@@ -1,0 +1,457 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Exploring-data by Anderson-Lab</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Exploring-data</h1>
+        <p></p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/Anderson-Lab/exploring-data" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/Anderson-Lab/exploring-data/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/Anderson-Lab/exploring-data/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>
+<a id="exploring-data" class="anchor" href="#exploring-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Exploring Data</h1>
+
+<h2>
+<a id="where-are-we-at" class="anchor" href="#where-are-we-at" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Where are we at?</h2>
+
+<p>We know how to</p>
+
+<ul>
+<li>clean data</li>
+<li>move it around</li>
+<li>organize it</li>
+<li>select the data we want</li>
+<li>select the columns we want</li>
+<li>convert between formats</li>
+<li>and much more</li>
+</ul>
+
+<p>Now it's time for some fun exploring the data!</p>
+
+<h2>
+<a id="three-perspectives" class="anchor" href="#three-perspectives" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Three perspectives</h2>
+
+<ol>
+<li>Inspect the data and its properties (e.g., what the raw data looks like, how many data points does it have, what kind of features)</li>
+<li>Compute descriptive statistics (e.g., text based output)</li>
+<li>Create visualizations from the data</li>
+</ol>
+
+<h2>
+<a id="inspecting-data-and-its-properties" class="anchor" href="#inspecting-data-and-its-properties" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspecting Data and Its Properties</h2>
+
+<p>We often need to know</p>
+
+<ul>
+<li>How many data points and features does the data set have?</li>
+<li>What does the raw data look like?</li>
+<li>What kind of features does the data set have?</li>
+<li>Can some of these features be treated as categorical or factors?</li>
+</ul>
+
+<h3>
+<a id="checking-whether-you-have-a-header-or-not" class="anchor" href="#checking-whether-you-have-a-header-or-not" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Checking whether you have a header or not</h3>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">cd</span> <span class="pl-k">~</span>/data-science-at-the-command-line/book/ch07/data</pre></div>
+
+<div class="highlight highlight-source-shell"><pre>ls</pre></div>
+
+<pre><code>datatypes.csv  immigration.dat  investments2.csv  iris.csv  tips.csv
+</code></pre>
+
+<div class="highlight highlight-source-shell"><pre>head iris.csv<span class="pl-k">|</span> csvlook</pre></div>
+
+<pre><code>|---------------+-------------+--------------+-------------+--------------|
+|  sepal_length | sepal_width | petal_length | petal_width | species      |
+|---------------+-------------+--------------+-------------+--------------|
+|  5.1          | 3.5         | 1.4          | 0.2         | Iris-setosa  |
+|  4.9          | 3.0         | 1.4          | 0.2         | Iris-setosa  |
+|  4.7          | 3.2         | 1.3          | 0.2         | Iris-setosa  |
+|  4.6          | 3.1         | 1.5          | 0.2         | Iris-setosa  |
+|  5.0          | 3.6         | 1.4          | 0.2         | Iris-setosa  |
+|  5.4          | 3.9         | 1.7          | 0.4         | Iris-setosa  |
+|  4.6          | 3.4         | 1.4          | 0.3         | Iris-setosa  |
+|  5.0          | 3.4         | 1.5          | 0.2         | Iris-setosa  |
+|  4.4          | 2.9         | 1.4          | 0.2         | Iris-setosa  |
+|---------------+-------------+--------------+-------------+--------------|
+</code></pre>
+
+<h3>
+<a id="inspect-all-the-data" class="anchor" href="#inspect-all-the-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspect all the data</h3>
+
+<p>Sometimes you want to print the entire contents to the screen with the cat command. But this prints it all at once. We can use the less command.</p>
+
+<div class="highlight highlight-source-shell"><pre>less -S iris.csv</pre></div>
+
+<p>The -S ensures that long lines are not wrapped. Use up and down to move through the file or by pressing the space.</p>
+
+<h3>
+<a id="feature-names-and-data-types" class="anchor" href="#feature-names-and-data-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Feature Names and Data Types</h3>
+
+<div class="highlight highlight-source-shell"><pre>sed -e <span class="pl-s"><span class="pl-pds">'</span>s/,/\n/g;q<span class="pl-pds">'</span></span> iris.csv</pre></div>
+
+<pre><code>sepal_length
+sepal_width
+petal_length
+petal_width
+species
+</code></pre>
+
+<h3>
+<a id="dont-forget-we-can-define-functions" class="anchor" href="#dont-forget-we-can-define-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Don't forget we can define functions!</h3>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-en">names</span> () { sed -e <span class="pl-s"><span class="pl-pds">'</span>s/,/\n/g;q<span class="pl-pds">'</span></span><span class="pl-k">;</span> }</pre></div>
+
+<div class="highlight highlight-source-shell"><pre>names <span class="pl-k">&lt;</span> iris.csv</pre></div>
+
+<pre><code>sepal_length
+sepal_width
+petal_length
+petal_width
+species
+</code></pre>
+
+<p>You can also use csvsql to determine the datatypes of the columns. Very important!</p>
+
+<div class="highlight highlight-source-shell"><pre>head datatypes.csv</pre></div>
+
+<pre><code>a,b,c,d,e,f,g
+2,0.0,FALSE,"""Yes!""",2011-11-11 11:00,2012-09-08,12:34
+42,3.1415,TRUE,"Oh, good",2014-09-15,12/6/70,0:07 PM
+66,,False,2198,,,
+</code></pre>
+
+<div class="highlight highlight-source-shell"><pre>csvsql datatypes.csv</pre></div>
+
+<pre><code>CREATE TABLE datatypes (
+    a INTEGER NOT NULL, 
+    b FLOAT, 
+    c BOOLEAN NOT NULL, 
+    d VARCHAR(8) NOT NULL, 
+    e DATETIME, 
+    f DATE, 
+    g TIME, 
+    CHECK (c IN (0, 1))
+);
+</code></pre>
+
+<p>Now this isn't perfect and we need more information sometimes. Especially about factors and categories and things like zip codes. We can get some insight into this using csvcut, sort, and uniq. Or more conviently using the csvstat command.</p>
+
+<div class="highlight highlight-source-shell"><pre>PATH=<span class="pl-smi">$PATH</span>:<span class="pl-k">~</span>/data-science-at-the-command-line/tools</pre></div>
+
+<div class="highlight highlight-source-shell"><pre>cat iris.csv<span class="pl-k">|</span>csvcut -c species <span class="pl-k">|</span> body <span class="pl-s"><span class="pl-pds">"</span>sort | uniq | wc -l<span class="pl-pds">"</span></span></pre></div>
+
+<pre><code>species
+3
+</code></pre>
+
+<div class="highlight highlight-source-shell"><pre>csvstat investments2.csv --unique</pre></div>
+
+<pre><code>  1. company_permalink: 27342
+  2. company_name: 27324
+  3. company_category_list: 8759
+  4. company_market: 443
+  5. company_country_code: 150
+  6. company_state_code: 147
+  7. company_region: 1079
+  8. company_city: 3305
+  9. investor_permalink: 11176
+ 10. investor_name: 11135
+ 11. investor_category_list: 468
+ 12. investor_market: 134
+ 13. investor_country_code: 111
+ 14. investor_state_code: 80
+ 15. investor_region: 549
+ 16. investor_city: 1198
+ 17. funding_round_permalink: 41790
+ 18. funding_round_type: 13
+ 19. funding_round_code: 15
+ 20. funded_at: 3595
+ 21. funded_month: 295
+ 22. funded_quarter: 121
+ 23. funded_year: 34
+ 24. raised_amount_usd: 6143
+</code></pre>
+
+<h2>
+<a id="computing-descriptive-statistics" class="anchor" href="#computing-descriptive-statistics" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Computing Descriptive Statistics</h2>
+
+<div class="highlight highlight-source-shell"><pre>csvstat datatypes.csv</pre></div>
+
+<pre><code>  1. a
+    &lt;type 'int'&gt;
+    Nulls: False
+    Values: 2, 66, 42
+  2. b
+    &lt;type 'float'&gt;
+    Nulls: True
+    Values: 0.0, 3.1415
+  3. c
+    &lt;type 'bool'&gt;
+    Nulls: False
+    Unique values: 2
+    5 most frequent values:
+        False:  2
+        True:   1
+  4. d
+    &lt;type 'unicode'&gt;
+    Nulls: False
+    Values: 2198, "Yes!", Oh, good
+  5. e
+    &lt;type 'datetime.datetime'&gt;
+    Nulls: True
+    Values: 2011-11-11 11:00:00, 2014-09-15 00:00:00
+  6. f
+    &lt;type 'datetime.date'&gt;
+    Nulls: True
+    Values: 2012-09-08, 1970-12-06
+  7. g
+    &lt;type 'datetime.time'&gt;
+    Nulls: True
+    Values: 12:34:00, 12:07:00
+
+Row count: 3
+</code></pre>
+
+<div class="highlight highlight-source-shell"><pre>csvstat datatypes.csv --max
+csvstat datatypes.csv --min
+csvstat datatypes.csv --stdevs
+csvstat datatypes.csv --freq
+<span class="pl-c"># See book or documentation for full list</span>
+
+</pre></div>
+
+<pre><code>  1. a: 66
+  2. b: 3.1415
+  3. c: True
+  4. d: Oh, good
+  5. e: 2014-09-15 00:00:00
+  6. f: 2012-09-08
+  7. g: 12:34:00
+  1. a: 2
+  2. b: 0.0
+  3. c: False
+  4. d: "Yes!"
+  5. e: 2011-11-11 11:00:00
+  6. f: 1970-12-06
+  7. g: 12:07:00
+usage: csvstat [-h] [-d DELIMITER] [-t] [-q QUOTECHAR] [-u {0,1,2,3}] [-b]
+               [-p ESCAPECHAR] [-z MAXFIELDSIZE] [-e ENCODING] [-S] [-H] [-v]
+               [--zero] [-y SNIFFLIMIT] [-c COLUMNS] [--max] [--min] [--sum]
+               [--mean] [--median] [--stdev] [--nulls] [--unique] [--freq]
+               [--len] [--count]
+               [FILE]
+csvstat: error: unrecognized arguments: --stdevs
+  1. a: { "2": 1, "42": 1, "66": 1 }
+  2. b: { "3.1415": 1, "0.0": 1 }
+  3. c: { "False": 2, "True": 1 }
+  4. d: { "2198": 1, ""Yes!"": 1, "Oh, good": 1 }
+  5. e: { "2014-09-15 00:00:00": 1, "2011-11-11 11:00:00": 1 }
+  6. f: { "2012-09-08": 1, "1970-12-06": 1 }
+  7. g: { "12:07:00": 1, "12:34:00": 1 }
+</code></pre>
+
+<p>You can also select a subset of features</p>
+
+<div class="highlight highlight-source-shell"><pre>csvstat investments2.csv -c 2,13,19</pre></div>
+
+<pre><code>  2. company_name
+    &lt;type 'unicode'&gt;
+    Nulls: True
+    Unique values: 27324
+    5 most frequent values:
+        Aviir:  13
+        Galectin Therapeutics:  12
+        Rostima:    12
+        Facebook:   11
+        Lending Club:   11
+    Max length: 66
+ 13. investor_country_code
+    &lt;type 'unicode'&gt;
+    Nulls: True
+    Unique values: 111
+    5 most frequent values:
+        USA:    20806
+        GBR:    2357
+        DEU:    946
+        CAN:    893
+        FRA:    737
+    Max length: 15
+ 19. funding_round_code
+    &lt;type 'unicode'&gt;
+    Nulls: True
+    Unique values: 15
+    5 most frequent values:
+        a:  7529
+        b:  4776
+        c:  2452
+        d:  1042
+        e:  384
+    Max length: 10
+
+Row count: 41799
+</code></pre>
+
+<p>One nice thing is csvstat also reports the number of rows. Also, don't forget that these are based on heuristics, so double check with manual inspection.</p>
+
+<h2>
+<a id="note" class="anchor" href="#note" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Note</h2>
+
+<p>So here the book goes on a tangent about a program called Rio, which allows us to run R and create plots at the command line. While this is sometimes necessary if you have a pipeline, I find this not as useful to just switching over to a language with plotting abilities. We will just use R notebooks, which I'll show you how to setup during lab/worksheet day. I will switch over to a R notebook now.</p>
+
+<div class="highlight highlight-source-shell"><pre>head immigration.csv</pre></div>
+
+<pre><code>Period,Austria,Hungary,Belgium,Czechoslovakia,Denmark,France,Germany,Greece,Ireland,Italy,Netherlands,Norway,Sweden,Poland,Portugal,Romania,Soviet_Union,Spain,Switzerland,United_Kingdom,Yugoslavia,Other_Europe,TOTAL,
+1891-1900,234081,181288,18167,0,50231,30770,505152,15979,388416,651893,26758,95015,226266,96720,27508,12750,505290,8731,31179,271538,0,282,3378014,
+1901-1910,668209,808511,41635,0,65285,73379,341498,167519,339065,2045877,48262,190505,249534,0,69149,53008,1597306,27935,34922,525950,0,39945,7387494,
+1911-1920,453649,442693,33746,3426,41983,61897,143945,184201,146181,1109524,43718,66395,95074,4813,89732,13311,921201,68611,23091,341408,1888,31400,4321887,
+1921-1930,32868,30680,15846,102194,32430,49610,412202,51084,211234,455315,26948,68531,97249,227734,29994,67646,61742,28958,29676,339570,49064,42619,2463194,
+1931-1940,3563,7861,4817,14393,2559,12623,144058,9119,10973,68028,7150,4740,3960,17026,3329,3871,1370,3258,5512,31572,5835,11949,377566,
+1941-1950,24860,3469,12189,8347,5393,38809,226578,8973,19789,57661,14860,10100,10665,7571,7423,1076,571,2898,10547,139306,1576,8486,621147,
+1951-1960,67106,36637,18575,918,10984,51121,477765,47608,43362,185491,52277,22935,21697,9985,19588,1039,671,7894,17675,202824,8225,16350,1325727,
+1961-1970,20621,5401,9192,3273,9201,45237,190796,85969,32966,214111,30606,15484,17116,53539,76065,3531,2465,44659,18453,213822,20381,11604,1124492,
+</code></pre>
+
+<h2>
+<a id="visualizations" class="anchor" href="#visualizations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Visualizations</h2>
+
+<p>We are now using the R programming language and specifically, I want to show you some examples using a program called ggplot.</p>
+
+<p>First thing is we need to modify the data we are going to plot. We could do that in a bash terminal, but you should know that you can call bash from R using the system function.</p>
+
+<div class="highlight highlight-source-r"><pre>setwd(<span class="pl-s"><span class="pl-pds">"</span>~/data-science-at-the-command-line/book/ch07/data<span class="pl-pds">"</span></span>)</pre></div>
+
+<p>See the book for a break down of this command, but we need to use our command line magic to change the file for easier input into R.</p>
+
+<div class="highlight highlight-source-r"><pre>system(<span class="pl-s"><span class="pl-pds">"</span>sed -re '/^#/d;s/<span class="pl-cce">\t</span>/,/g;s/,-,/,0,/g;s/Region/Period/' immigration.dat &gt; immigration.csv<span class="pl-pds">"</span></span>)</pre></div>
+
+<p>Now we are ready to plot!</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-v">df</span> <span class="pl-k">=</span> read.csv(<span class="pl-s"><span class="pl-pds">'</span>immigration.csv<span class="pl-pds">'</span></span>)</pre></div>
+
+<div class="highlight highlight-source-r"><pre>library(<span class="pl-smi">ggplot2</span>)
+library(<span class="pl-smi">reshape2</span>)</pre></div>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-v">df.long</span> <span class="pl-k">=</span> melt(<span class="pl-smi">df</span>,<span class="pl-v">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Period<span class="pl-pds">"</span></span>,<span class="pl-v">variable.name</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Country<span class="pl-pds">"</span></span>,<span class="pl-v">value.name</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Count<span class="pl-pds">"</span></span>)
+</pre></div>
+
+<ol>
+    <li>Austria</li>
+    <li>Hungary</li>
+    <li>Belgium</li>
+    <li>Czechoslovakia</li>
+    <li>Denmark</li>
+    <li>France</li>
+    <li>Germany</li>
+    <li>Greece</li>
+    <li>Ireland</li>
+    <li>Italy</li>
+    <li>Netherlands</li>
+    <li>Norway</li>
+    <li>Sweden</li>
+    <li>Poland</li>
+    <li>Portugal</li>
+    <li>Romania</li>
+    <li>Soviet_Union</li>
+    <li>Spain</li>
+    <li>Switzerland</li>
+    <li>United_Kingdom</li>
+    <li>Yugoslavia</li>
+    <li>Other_Europe</li>
+</ol>
+
+<div class="highlight highlight-source-r"><pre>ggplot(<span class="pl-smi">df.long</span>[which(<span class="pl-smi">df.long</span><span class="pl-k">$</span><span class="pl-smi">Country</span> <span class="pl-k">%in%</span> c(<span class="pl-s"><span class="pl-pds">'</span>Denmark<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Norway<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Netherlands<span class="pl-pds">'</span></span>)),]) <span class="pl-k">+</span> geom_bar(aes(<span class="pl-smi">Country</span>,<span class="pl-smi">Count</span>,<span class="pl-v">fill</span><span class="pl-k">=</span><span class="pl-smi">Period</span>), <span class="pl-v">stat</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>identity<span class="pl-pds">"</span></span>) <span class="pl-k">+</span> 
+ scale_fill_brewer(<span class="pl-v">palette</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Set1<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+ labs(<span class="pl-v">x</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Country of origin<span class="pl-pds">"</span></span>,<span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Immigration by decade<span class="pl-pds">"</span></span>)
+</pre></div>
+
+<p><img src="output_8_0.svg" alt="svg"></p>
+
+<div class="highlight highlight-source-r"><pre>colnames(<span class="pl-smi">df</span>)</pre></div>
+
+<ol>
+    <li>'Period'</li>
+    <li>'Austria'</li>
+    <li>'Hungary'</li>
+    <li>'Belgium'</li>
+    <li>'Czechoslovakia'</li>
+    <li>'Denmark'</li>
+    <li>'France'</li>
+    <li>'Germany'</li>
+    <li>'Greece'</li>
+    <li>'Ireland'</li>
+    <li>'Italy'</li>
+    <li>'Netherlands'</li>
+    <li>'Norway'</li>
+    <li>'Sweden'</li>
+    <li>'Poland'</li>
+    <li>'Portugal'</li>
+    <li>'Romania'</li>
+    <li>'Soviet_Union'</li>
+    <li>'Spain'</li>
+    <li>'Switzerland'</li>
+    <li>'United_Kingdom'</li>
+    <li>'Yugoslavia'</li>
+    <li>'Other_Europe'</li>
+    <li>'TOTAL'</li>
+    <li>'X'</li>
+</ol>
+
+<h2>
+<a id="density-plot" class="anchor" href="#density-plot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Density Plot</h2>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-v">df</span> <span class="pl-k">=</span> read.csv(<span class="pl-s"><span class="pl-pds">'</span>tips.csv<span class="pl-pds">'</span></span>)</pre></div>
+
+<div class="highlight highlight-source-r"><pre>ggplot(<span class="pl-smi">df</span>) <span class="pl-k">+</span> geom_density(aes(<span class="pl-smi">tip</span><span class="pl-k">/</span><span class="pl-smi">bill</span> <span class="pl-k">*</span> <span class="pl-c1">100</span>,<span class="pl-v">fill</span><span class="pl-k">=</span><span class="pl-smi">sex</span>),<span class="pl-v">alpha</span><span class="pl-k">=</span><span class="pl-c1">0.3</span>) <span class="pl-k">+</span> xlab(<span class="pl-s"><span class="pl-pds">"</span>percent<span class="pl-pds">"</span></span>)</pre></div>
+
+<p><img src="output_12_0.svg" alt="svg"></p>
+
+<h2>
+<a id="scatter-example" class="anchor" href="#scatter-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scatter Example</h2>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-v">df</span> <span class="pl-k">=</span> read.csv(<span class="pl-s"><span class="pl-pds">'</span>tips.csv<span class="pl-pds">'</span></span>)</pre></div>
+
+<div class="highlight highlight-source-r"><pre>ggplot(<span class="pl-smi">df</span>) <span class="pl-k">+</span> geom_point(aes(<span class="pl-smi">bill</span>,<span class="pl-smi">tip</span>,<span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-smi">time</span>))</pre></div>
+
+<p><img src="output_15_0.svg" alt="svg"></p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/Anderson-Lab">Anderson-Lab</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
